@@ -3,5 +3,5 @@
 /* Note: an asteroid image is included in this repo.
 Feel free to use it if you like. */
 .asteroid {
-  color: yellow;
+  background-image: url(asteroid.png);
 }
