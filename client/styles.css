@@ -2,6 +2,9 @@
 
 /* Note: an asteroid image is included in this repo.
 Feel free to use it if you like. */
-.asteroid {
-  background-image: url(asteroid.png);
+#background {
+  width: 750px;
+  height: 500px;
+  background-image: url('IMG_4328.JPG');
+  background-size: 100% auto;
 }

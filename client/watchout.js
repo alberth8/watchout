@@ -6,13 +6,13 @@ $(window).load(function() {
 var settings = {
   width: 750,
   height: 500,
-  numEnemies: 50,
+  numEnemies: 20,
   score: 0,
   highScore: 0,
   collisions: 0,
   isHit: false,
   delay: 1000,
-  svg: d3.select('body').append('svg'), // svg refers to container
+  svg: d3.select('#background').append('svg'), // svg refers to container
   size: 25
 };
 
@@ -29,18 +29,19 @@ var game = {
       dataset.push(settings.size);//(Math.random() * 1) + 5);
     }
     // creating enemies
-    var circles = settings.svg.selectAll('circle')
+    var circles = settings.svg.selectAll('image')
       .data(dataset)
       .enter() // select placehol ders that have a value but no key (yet)
-      .append('circle'); // sets key 
-    circles.attr('cx', function(d, i) { // setting attributes for enemies
+      .append('svg:image'); // sets key 
+    circles.attr('x', function(d, i) { // setting attributes for enemies
       return 25;//(i * 50) + 25;
     })
-      .attr('cy', settings.height / 2)
-      .attr('r', function(d) {
-        return d;
-      }).classed({'asteroid': true})
-      .style('image', 'url(asteroid.png)'); // failed attempt
+      .attr('y', settings.height / 2)
+      // .attr('r', function(d) {
+      //   return d;
+      // })
+      .attr('xlink:href', 'tony.png')
+      .attr({'width': '75px', 'height': '75px'}); 
   },
 
   // update / tracking functions
@@ -48,24 +49,24 @@ var game = {
     // moving enemies
     setInterval(function() { 
       // movement
-      d3.selectAll('circle').each(function() { // moving each circles to random positions
+      d3.selectAll('image').each(function() { // moving each circles to random positions
         d3.select(this)
         .transition() 
-        .tween('circle', function() { // tween calls during every point of transition (pixel), *not* every second
+        .tween('image', function() { // tween calls during every point of transition (pixel), *not* every second
           return function() {
             // checks if in 25x25 square buffer of center
-            if ((Math.abs(this.getAttribute('cx') - player.getX()) < 25) && (Math.abs(this.getAttribute('cy') - player.getY()) < 10 )) {
+            if ((Math.abs(this.getAttribute('x') - player.getX()) < 25) && (Math.abs(this.getAttribute('y') - player.getY()) < 10 )) {
               // changes collision state to true
               game.hitCheck(); 
               console.log('test!');
             }
           };
         })
-        .attr('cx', (Math.random() * (settings.width + 200)) - 100)
-        .attr('cy', (Math.random() * (settings.height + 200)) - 100)
-        .duration(1500); // time lapse from point A to point B
+        .attr('x', (Math.random() * (settings.width + 200)) - 100)
+        .attr('y', (Math.random() * (settings.height + 200)) - 100)
+        .duration(2500); // time lapse from point A to point B
       });
-    }, 1000); // idle time (between movements)
+    }, 2000); // idle time (between movements)
 
     // scoring - updating score box
     // originally, collision checker repeated too quickly in tweens, and no way to slow down,
@@ -119,13 +120,17 @@ var player = {
         .attr('cy', player.getY());
       });
 
-    var ellipse = settings.svg.append('ellipse')
+    var ellipse = settings.svg.append('circle')
       .attr('cx', settings.width / 2)
       .attr('cy', settings.height / 2)
-      .attr('rx', 25)
-      .attr('ry', 10)
-      .attr('fill', 'red')
+      .attr('r', 20)
+      .attr('fill', 'blue')
       .call(drag);
+      // .attr('x', settings.width / 2) // x is top left hand corner
+      // .attr('y', settings.height / 2)
+      // .attr('xlink:href', 'tony.png')
+      // .attr({'width': '35px', 'height': '35px'})
+      // .call(drag);
   },
   // setter functions - used to set `posX`
   setX: function(value) {
